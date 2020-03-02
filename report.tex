@@ -1,0 +1,642 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={STAC67 Case Study: Model For Predicting House Prices (Group 6)},
+            pdfauthor={Ethan Anada 1003171907, Joseph Dong 1003349272, Subagan Kamaleswaran 1002163712, Shengji Lin 1001704300, Yi Chao Wang (not responding to dm)},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{STAC67 Case Study: Model For Predicting House Prices (Group 6)}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Ethan Anada 1003171907, Joseph Dong 1003349272, Subagan Kamaleswaran
+1002163712, Shengji Lin 1001704300, Yi Chao Wang (not responding to dm)}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+    \date{}
+    \predate{}\postdate{}
+  
+
+\begin{document}
+\maketitle
+
+\section{Abstract}\label{abstract}
+
+There are many influential factors that can help in determining an
+estimated house price in a particular neighbourhood. In order to model
+the value of a house in the suburbs of Boston, we have obtained a data
+set of 506 observations with 13 factors that may or may not affect the
+value of a house (Harrison \& Rubinfield 1978). These factors included
+looking into the effects of crime rates, average number of rooms per
+dwelling, etc. Furthermore, we used R in combination with modeling
+techniques to create a linear model of Boston's house prices.
+
+\pagebreak
+
+\section{Background and Significance}\label{background-and-significance}
+
+Housing prices play an important role in deciding when to buy or sell
+houses. For home buyers, the ability to predict the housing prices can
+help make a decision on whether to over or under bid on a house. On the
+other hand, home sellers can use the housing price model to predict the
+how much money they can make by selling their house. Those that are in
+the real estate business would also be interested in a model of house
+prices in order to deliver the best reults for their clients, or in
+order to make a profit on their own properties.
+
+Due to its significance it is essential to create a model to predict the
+prices of houses by considering influential factors such as crime rate
+in a specific town. A study done by Claudio Frischtak and Benjamin R.
+Mandel called Crime, House Prices, and Inequality: The Effect of UPPs in
+Rio, looks at the relationship between crime rate and housing prices.
+The experiment was conducted in low-income communities where the crime
+rate was reduced, and consequently, the prices of nearby residential
+real estate increased (Frischtak et al., 2012). Nevertheless, the
+experiment shows crime rates in an area can affect the prices of houses.
+
+However, besides just perusing the literature and using our own
+hypotheses on influential parameters, we were also able to use
+statistical tests to decide on influential parameters and also to
+eliminate parameters that tracked each other too closely. By applying a
+combination of these techniques we should be able achieve our goal of
+creating a model for predicting the price of a house.
+
+\section{Exploratory Data Analysis}\label{exploratory-data-analysis}
+
+Our data contains information regarding the price of homes in suburbs of
+Boston. It contains 506 entries, each corresponding to a community. Each
+entry contains 13 parameters that may or may not affect the price of the
+median house price of a community, and a corresponding label for the
+average price of a house in thousands of dollars.
+
+For the following histograms a red line indicates mean, and a blue line
+indicates median.
+
+\subsection{0. Average House Price in Thousands of Dollars (1978)
+(y)}\label{average-house-price-in-thousands-of-dollars-1978-y}
+
+\begin{center}\includegraphics{report_files/figure-latex/unnamed-chunk-3-1} \end{center}
+
+The response variable, mean house price is 22.53 thousand dollars,
+median is 21.2 thousand dollars.
+
+\subsection{1. per capita crime rate by town
+(x1)}\label{per-capita-crime-rate-by-town-x1}
+
+\begin{center}\includegraphics{report_files/figure-latex/unnamed-chunk-4-1} \end{center}
+
+The mean of the crime rate per capita by town is 3.61, and the median is
+0.25. Which leads to the data being right-skewed showing that crime
+tends to be concentrated. We expect that (x1) will be negatively
+correlated with house price, since in general people find crime
+undesirable. (Frischtak et al. 2012)
+
+\subsection{2. proportion of residential land zoned for lots over 25,000
+sq.ft.
+(x2)}\label{proportion-of-residential-land-zoned-for-lots-over-25000-sq.ft.-x2}
+
+\begin{center}\includegraphics{report_files/figure-latex/unnamed-chunk-5-1} \end{center}
+
+The mean proportion of residential land zoned for lots over 25,000 sq.ft
+is 11.36, and the median is 0. This shows that the majority of
+communities don't have any homes with a large lot, but for the
+communities that do, most houses also have a large lot. As a result this
+parameter tends to be quite right skewed. We expect that large lots come
+with more expensive houses.
+
+\subsection{3. proportion of non-retail business acres per town
+(x3)}\label{proportion-of-non-retail-business-acres-per-town-x3}
+
+\begin{center}\includegraphics{report_files/figure-latex/unnamed-chunk-6-1} \end{center}
+
+The proportion of the non-retail business acres per towns means that the
+surrounding area in the community are residences or recreation area.
+This may lead to calmer surroundings which could positively affect the
+house value of the surroundings. The mean proportion of non-retail
+business acres per town is 11.14, and median is 9.69
+
+\subsection{4. Charles River dummy variable
+(x4)}\label{charles-river-dummy-variable-x4}
+
+\begin{center}\includegraphics{report_files/figure-latex/unnamed-chunk-7-1} \end{center}
+
+The Charles River dummy variables (x4) is 1 whenever the tract bound a
+river, and 0 whenever it doesn't. In general waterfront property is
+desirable, so we expect this this to increase house prices. The mean of
+this parameter is 0.07, and the median is 0, so in general the vast
+majority of homes do not have land that borders a river.
+
+\subsection{5. nitric oxide concentration (parts per 10 million)
+(x5)}\label{nitric-oxide-concentration-parts-per-10-million-x5}
+
+\begin{center}\includegraphics{report_files/figure-latex/unnamed-chunk-8-1} \end{center}
+
+Nitric oxide can be very dangerous when it reachs 100 ppm. According to
+J. S. Beckman, and W. H. Koppenol's paper, ``Nitric oxide, superoxide,
+and peroxynitrite: the good, the bad, and ugly'', it is mentioned the
+toxicity of nitric oxide can be greatly enchanced when reacting with
+superoxide (Beckman \& Koppenol, 1996). As the ppm levels increase, the
+value of the variable increases and results in a lower house price. The
+mean concentration of nitric oxide is 0.5547, and the median is 0.538.
+
+\subsection{6. average number of rooms per dwelling
+(x6)}\label{average-number-of-rooms-per-dwelling-x6}
+
+\begin{center}\includegraphics{report_files/figure-latex/unnamed-chunk-9-1} \end{center}
+
+In general the number of rooms in a house is very strongly correlated to
+the size of the house. So we expect that this parameter is positively
+correlated to the price of the house. The mean rooms per house is 6.23,
+and the median of 6.20.
+
+\subsection{7. proportion of owner occupied units built prior to 1940
+(x7)}\label{proportion-of-owner-occupied-units-built-prior-to-1940-x7}
+
+\begin{center}\includegraphics{report_files/figure-latex/unnamed-chunk-10-1} \end{center}
+
+There are pros and cons to owning an old house but mostly it is
+undesirable to own an old house due to the age of its components which
+will require more maintenance, so we believe that this parameter is
+negatively correlated to house price. The mean proportion of old houses
+built prior to 1940 is 68.57, and the median is 77.5.
+
+\subsection{8. weighted distances to five Boston employment centres
+(x8)}\label{weighted-distances-to-five-boston-employment-centres-x8}
+
+\begin{center}\includegraphics{report_files/figure-latex/unnamed-chunk-11-1} \end{center}
+
+In general it is desirable to live close to your place of employment,
+since it will reduce commute time, which in turn increases your leisure
+time. So we expect that this parameter is negatively correlated to house
+price. The mean weighted distance of the house to five Boston employment
+centres is 3.98, and the median of 3.20.
+
+\subsection{9. index of accessibility to radial highways
+(x9)}\label{index-of-accessibility-to-radial-highways-x9}
+
+\begin{center}\includegraphics{report_files/figure-latex/unnamed-chunk-12-1} \end{center}
+
+The index of accessibility to radial highways is a value that measure
+the farness of a house to a radial highway. This parameter is high when
+a house is far from a radial highway, and low when it is close. We
+expect that the convenience of being close to a radial highway will
+increase the price of a house. The mean index of accessiblity in this
+dataset is 9.549, and the median is 5.
+
+\subsection{10. full-value property-tax rate per 10,000
+(x10)}\label{full-value-property-tax-rate-per-10000-x10}
+
+\begin{center}\includegraphics{report_files/figure-latex/unnamed-chunk-13-1} \end{center}
+
+The mean of full-value property-tax rate per 10,000 is 408.2 and the
+median of 330.0. We expect that property tax will be strongly correlated
+to house price, since in real life property tax rates are often
+calculated as a percentage of the value of the property.
+
+\subsection{11. pupil-teacher ratio by town
+(x11)}\label{pupil-teacher-ratio-by-town-x11}
+
+\begin{center}\includegraphics{report_files/figure-latex/unnamed-chunk-14-1} \end{center}
+
+In general a lower pupil to teacher ratio indicates a well funded
+school, so we think that this parameter will be negatively correlated to
+the price of a house. The mean amount of students that each teacher has
+to teach in this dataset is 18.46, and the median is 19.05.
+
+\subsection{12. 1000(B-0.63)\^{}2 where B is the proportion of African
+Americans by town
+(x12)}\label{b-0.632-where-b-is-the-proportion-of-african-americans-by-town-x12}
+
+\begin{center}\includegraphics{report_files/figure-latex/unnamed-chunk-15-1} \end{center}
+
+Note that the function 1000(B-0.63)\^{}2 in the range of B in {[}0, 1{]}
+is high when B is near 0 and middle value when B is near 1, but is low
+when B is near 0.63. This can be interpreted as (x12) being higher when
+a community is homogenous in ethnicity. We theorize that homogenous
+communities would have higher house prices due to reduced racial
+tensions making a safer neighborhood. The mean value of this parameter
+is 356.674, and the median is 391.44.
+
+\subsection{13. a numeric vector of percentage values of lower status
+population
+(x13).}\label{a-numeric-vector-of-percentage-values-of-lower-status-population-x13.}
+
+\begin{center}\includegraphics{report_files/figure-latex/unnamed-chunk-16-1} \end{center}
+
+Almost by definition impoverished people cannot afford expensive
+housing, so it is expected that communities with more impoverished
+people will have lower house prices. The mean of this parameter is
+12.65, and the median is 11.36.
+
+\section{Model}\label{model}
+
+In order to begin the model selection process, we decided to use the
+stepAIC algorithm provided by an r library in order to automatically
+remove some variables from a full model (\(y=\sum x_i\)).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{full_model =}\StringTok{ }\KeywordTok{lm}\NormalTok{(y}\OperatorTok{~}\NormalTok{x1 }\OperatorTok{+}\StringTok{ }\NormalTok{x2 }\OperatorTok{+}\StringTok{ }\NormalTok{x3}\OperatorTok{+}\StringTok{ }\NormalTok{x4}\OperatorTok{+}\NormalTok{x5}\OperatorTok{+}\NormalTok{x6 }\OperatorTok{+}\NormalTok{x7 }\OperatorTok{+}\NormalTok{x8}\OperatorTok{+}\NormalTok{x9}\OperatorTok{+}\NormalTok{x10 }\OperatorTok{+}\NormalTok{x11}\OperatorTok{+}\NormalTok{x12}\OperatorTok{+}\NormalTok{x13, }\DataTypeTok{data=}\NormalTok{housingData)}
+\NormalTok{step =}\StringTok{ }\KeywordTok{stepAIC}\NormalTok{(full_model, }\DataTypeTok{direction =} \StringTok{"both"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{step}\OperatorTok{$}\NormalTok{anova}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Stepwise Model Path 
+## Analysis of Deviance Table
+## 
+## Initial Model:
+## y ~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10 + x11 + 
+##     x12 + x13
+## 
+## Final Model:
+## y ~ x1 + x2 + x4 + x5 + x6 + x8 + x9 + x10 + x11 + x12 + x13
+## 
+## 
+##   Step Df   Deviance Resid. Df Resid. Dev      AIC
+## 1                          492   11078.78 1589.643
+## 2 - x7  1 0.06183435       493   11078.85 1587.646
+## 3 - x3  1 2.51754013       494   11081.36 1585.761
+\end{verbatim}
+
+The results of the algorithm recommended that we remove \(x3\) and
+\(x7\) from our model, we decided do so since it lowered our AIC and
+also improved our \(R^2_{adj}\). We also decided to transform \(y\) by
+natural log, since we found that it also increases our \(R^2\).
+
+We then decided to continue to narrow down the parameters we wanted to
+use for our model by doing a cycle of checking for multicollinearity by
+computing variance inflation factor (VIF) of each of the parameters, and
+removing parameters with high VIF, and then checking whether the
+coefficient of a parameter is zero using hypothesis testing and removing
+them if they are probably zero. We repeated this process until we
+obtained low VIFs accross the board, and all coefficients on our
+parameters non-zero. We illustrate one iteration of this method.
+
+Computing VIF values shows that \(x10\) has high VIF which is indicative
+of serious multicollinearity, so we decide to remove \(x10\) from our
+model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{vif}\NormalTok{(log_model)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       x1       x2       x4       x5       x6       x8       x9      x10 
+## 1.789704 2.239229 1.059819 3.778011 1.834806 3.443420 6.861126 7.272386 
+##      x11      x12      x13 
+## 1.757681 1.341559 2.581984
+\end{verbatim}
+
+Looking at the significance of parameters by looking at the summary of
+the new model, we see that the coefficient of \(x2\) is probably
+plausibly 0, so we decide to remove \(x2\) to simplify our model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{test_model2 =}\StringTok{ }\KeywordTok{lm}\NormalTok{(}\KeywordTok{log}\NormalTok{ (y)}\OperatorTok{~}\StringTok{ }\NormalTok{x1 }\OperatorTok{+}\StringTok{ }\NormalTok{x2 }\OperatorTok{+}\StringTok{ }\NormalTok{x4 }\OperatorTok{+}\StringTok{ }\NormalTok{x5 }\OperatorTok{+}\StringTok{ }\NormalTok{x6 }\OperatorTok{+}\StringTok{ }\NormalTok{x8 }\OperatorTok{+}\StringTok{ }\NormalTok{x9 }\OperatorTok{+}\StringTok{ }\NormalTok{x11 }\OperatorTok{+}\StringTok{ }\NormalTok{x12 }\OperatorTok{+}\StringTok{ }\NormalTok{x13, }\DataTypeTok{data=}\NormalTok{housingData)}
+\KeywordTok{summary}\NormalTok{(test_model2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = log(y) ~ x1 + x2 + x4 + x5 + x6 + x8 + x9 + x11 + 
+##     x12 + x13, data = housingData)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.73447 -0.10493 -0.01084  0.09297  0.87348 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  4.0065321  0.2054382  19.502  < 2e-16 ***
+## x1          -0.0101496  0.0013339  -7.609 1.41e-13 ***
+## x2           0.0006511  0.0005400   1.206 0.228470    
+## x4           0.1169498  0.0346573   3.374 0.000798 ***
+## x5          -0.8609244  0.1397957  -6.158 1.52e-09 ***
+## x6           0.0989867  0.0164154   6.030 3.21e-09 ***
+## x8          -0.0487057  0.0075256  -6.472 2.33e-10 ***
+## x9           0.0053533  0.0016421   3.260 0.001191 ** 
+## x11         -0.0406652  0.0051938  -7.830 3.00e-14 ***
+## x12          0.0004321  0.0001088   3.973 8.15e-05 ***
+## x13         -0.0288688  0.0019297 -14.960  < 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.1928 on 495 degrees of freedom
+## Multiple R-squared:  0.7819, Adjusted R-squared:  0.7775 
+## F-statistic: 177.4 on 10 and 495 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+When our algroithm terminates after a few iterations, we arrive at a
+final model which is \(Log(y) = x1 +x4 + x6 +x8 +x11 +x12 +x13\)
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = log(y) ~ x1 + x4 + x6 + x8 + x11 + x12 + x13, data = housingData)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.73467 -0.10434 -0.01549  0.08468  1.02176 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  3.2404102  0.1703437  19.023  < 2e-16 ***
+## x1          -0.0086059  0.0012377  -6.953 1.13e-11 ***
+## x4           0.1042281  0.0358575   2.907 0.003815 ** 
+## x6           0.1150341  0.0166811   6.896 1.63e-11 ***
+## x8          -0.0197258  0.0051015  -3.867 0.000125 ***
+## x11         -0.0325010  0.0045973  -7.070 5.28e-12 ***
+## x12          0.0004629  0.0001098   4.215 2.97e-05 ***
+## x13         -0.0312488  0.0019401 -16.107  < 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.2002 on 498 degrees of freedom
+## Multiple R-squared:  0.7635, Adjusted R-squared:  0.7601 
+## F-statistic: 229.6 on 7 and 498 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+To ensure the legitimacy of our model, we decided to check if the AIC of
+our model has improved from the full model, and also use a validation
+strategy to detect overfitting. Doing the computation for AIC we found
+out that the AIC for the final model was \(AIC_{final} = -1711.30\)
+significantly lower than the AIC of the full model
+\(AIC_{full} = 1581.28\).
+
+The validation stategy we used was to partition the dataset randomly
+into 75\% training data and 25\% test data. We found that the root mean
+square error (RMSE) of our model on the training data was
+\(RMSE_{training} = 0.179\), and the RMSE of our model on our test data
+was \(RMSE_{test}=0.187\). Theses two values are very similar so we can
+infer that our model fits our training, and test data about similarly
+well.
+
+Finally now we examine the outliers, leverage point and influential
+points of our dataset. To find the outliers by filtering studentized
+deleted residuals that were larger than a threshold, outlined in week
+10/11 slides. The result of the studentized deleted residual showed that
+rows \((413, 372, 369, 372)\) were outlers. We decided to remove the
+outliers because it made our errors a bit more normal.
+
+\includegraphics{report_files/figure-latex/unnamed-chunk-27-1.pdf}
+\includegraphics{report_files/figure-latex/unnamed-chunk-28-1.pdf} Then
+we tried to find the leverage point and the influential points in our
+dataset, using the Cooke Distance and outlying X Observation Diagnostics
+also outlined in slides.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# # Influence}
+\NormalTok{final_p_prime <-}\StringTok{ }\KeywordTok{length}\NormalTok{(final_model}\OperatorTok{$}\NormalTok{coefficients)}
+\KeywordTok{influencePlot}\NormalTok{(final_model,  }\DataTypeTok{id.method=}\StringTok{"identify"}\NormalTok{,}
+              \DataTypeTok{main=}\StringTok{"Influence Plot"}\NormalTok{,}
+              \DataTypeTok{sub=}\StringTok{"Circle size is proportial to Cook's Distance"}\NormalTok{ )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{report_files/figure-latex/unnamed-chunk-29-1.pdf}
+
+\begin{verbatim}
+##        StudRes        Hat      CookD
+## 366  3.5212333 0.08574197 0.12628285
+## 375  4.0631617 0.04118896 0.07639792
+## 381  0.6993379 0.26896806 0.02001457
+## 402 -4.0110968 0.01221064 0.02144199
+## 406 -2.7819334 0.14379648 0.14247076
+## 419  1.3471917 0.16299819 0.03920626
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{DFFITS <-}\StringTok{ }\KeywordTok{dffits}\NormalTok{(final_model)}
+\KeywordTok{which}\NormalTok{(DFFITS }\OperatorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 366 368 
+## 366 368
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{D <-}\StringTok{ }\KeywordTok{cooks.distance}\NormalTok{(final_model)}
+\KeywordTok{which}\NormalTok{(D }\OperatorTok{>}\StringTok{ }\KeywordTok{qf}\NormalTok{(}\FloatTok{0.2}\NormalTok{, final_p_prime, n}\OperatorTok{-}\NormalTok{final_p_prime))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## named integer(0)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{DFBETAS <-}\StringTok{ }\KeywordTok{dfbetas}\NormalTok{(final_model)}
+\KeywordTok{head}\NormalTok{(DFBETAS)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    (Intercept)           x1           x4            x5           x6
+## 1 -0.056839989 -0.010036539  0.033188385 -0.0191008758  0.036862573
+## 2 -0.010554461  0.001877390  0.008773746  0.0135457033  0.003189174
+## 3 -0.009429083  0.001465189 -0.008474987 -0.0001240102  0.017278201
+## 4 -0.020390551  0.004001684 -0.007001247  0.0144589412  0.012797662
+## 5 -0.064911130  0.001214125 -0.014341519  0.0223407402  0.061581326
+## 6 -0.001306756  0.002763679 -0.004176505  0.0073934536 -0.009381047
+##             x8         x11           x12          x13
+## 1 0.0186687058 0.077753691 -0.0076740590  0.063721973
+## 2 0.0026502164 0.006225609 -0.0048697061  0.001820537
+## 3 0.0001021526 0.005786420  0.0023988456 -0.010732097
+## 4 0.0212799814 0.022760644  0.0025610752 -0.024161697
+## 5 0.0497599712 0.045488005  0.0136961720 -0.006530830
+## 6 0.0157506319 0.012754817  0.0005259435 -0.022376431
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{which}\NormalTok{(DFBETAS }\OperatorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## integer(0)
+\end{verbatim}
+
+The influential Points were the rows (366, 375, 381, 402, 406, 419) of
+the dataset, and there were 66 outlying X variables in our dataset using
+Guideline 1 from the slide 10-11 and 0 outlying X variables in our
+dataset using Guideline 2 from the same slide. Both of these sets of
+points were found after the outlying Y variable was removed from the
+dataset. We found no good reason to remove these points our training
+data.
+
+\section{Discussion and Conclusions}\label{discussion-and-conclusions}
+
+The goal of this study was to create a model of the house prices in
+Boston's suburbs. Throughout this report, we used different statistical
+methods along with R to create a linear model for the housing prices
+.Through creating the model we discovered only eight of the 13
+parameters were significant to the model. The eight important factors
+consisted of per capita crime rate by town, Charles River dummy
+variable, nitric oxide concentration, average number of rooms per house,
+weighted mean of distances to five Boston employment centers,
+pupil-teacher ratio by town, a percentage value of lower status
+population. The final parameter which was high when there were no
+African Americans, moderate when there were a high percentage of them
+and low when there were about 63\% of them in proportion by town. These
+findings are significant to the field as it raises awareness to what
+factors people look at when choosing a home to live in. As a result,
+realtors would be able to use the model to predict the price of a
+suitable home for their clients. Moreover, by understanding the various
+factors that can influence the pricing of houses, more studies can be
+conducted to understand why people prefer a certain attribute over
+another. This data can also be used to market certain houses and make it
+appealing to a certain demographic. This would benefit contractors as
+they would be able to strategically find locations to buy land and build
+housing in. The limitations of our model is that it is made from data
+collected in 1978. As a result, the model may be outdated and the
+parameters that affected the prices of a home in 1978 may not be as
+significant in 2019. Nevertheless, the model does not take market
+conditions into consideration. Therefore, the model we create whether it
+is with new or old data would only be accurate for a short amount of
+time.
+
+\section{References}\label{references}
+
+Beckman,, J. S., \& Koppenol, W. H. (1996). Nitric oxide, superoxide,
+and peroxynitrite: The good, the bad, and ugly. American Journal of
+Physiology Cell Physiology, 271(5). Retrieved March 30, 2018, from
+\url{https://doi.org/10.1152/ajpcell.1996.271.5.C1424}.
+
+Frischtak, C., \& Mandel, B. R. (2012). Crime, House Prices, and
+Inequality: The Effect of UPPs in Rio (542nd ed.). Federal Reserve Bank
+of New York Staff Reports. Retrieved March 25, 2019, from
+\url{https://www.newyorkfed.org/medialibrary/media/research/staff_reports/sr542.pdf}.
+
+Harrison, D., \& Rubinfeld, D. L. (1978). Hedonic housing prices and the
+demand for clean air. Journal of Environmental Economics and Management,
+5(1), 81-102. \url{doi:10.1016/0095-0696(78)90006-2}
+
+
+\end{document}
